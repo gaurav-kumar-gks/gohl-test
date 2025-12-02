@@ -1,12 +1,13 @@
 package repo
 
-
 import (
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"go.uber.org/zap"
 
-	"gks.com/gohl-test/internal/models"
 	"context"
+
+	"gks.com/gohl-test/internal/models"
 )
 
 type TransactionsRepository struct {
@@ -45,13 +46,14 @@ func (u *TransactionsRepository) CreateTransactionsTx(
 ) (*models.Transactions, error) {
 
 	query := `
-		INSERT INTO transactions (user_id, type, amount, description)
-		VALUES ($1, $2, $3, $4)
+		INSERT INTO transactions (id, user_id, type, amount, description)
+		VALUES ($1, $2, $3, $4, $5)
 		RETURNING id, user_id, type, amount, description, created_at, updated_at
 	`
 
 	var t models.Transactions
 	err := tx.QueryRow(ctx, query,
+		uuid.New().String(),
 		model.UserId,
 		model.Type,
 		model.Amount,

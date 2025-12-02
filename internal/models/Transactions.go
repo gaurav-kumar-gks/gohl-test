@@ -12,7 +12,7 @@ type Transactions struct {
 	Id uuid.UUID `json:"id" validate:"required"`
 	UserId uuid.UUID `json:"user_id" validate:"required"`
 	Type string `json:"type" validate:"required,oneof=debit credit"`
-	Amount decimal.Decimal `json:"amount" validate:"required,numeric"`
+	Amount decimal.Decimal `json:"amount" validate:"required"`
 	Description string `json:"description" validate:"required,max=255"`
 	CreatedAt time.Time `json:"created_at" validate:"required"`
 	UpdatedAt time.Time `json:"updated_at" validate:"required"`
@@ -22,7 +22,7 @@ type Transactions struct {
 type CreateTransactions struct {
 	UserId uuid.UUID `json:"user_id" validate:"required"`
 	Type string `json:"type" validate:"required,oneof=debit credit"`
-	Amount decimal.Decimal `json:"amount" validate:"required,numeric"`
+	Amount decimal.Decimal `json:"amount" validate:"required"`
 	Description string `json:"description" validate:"required,max=255"`
 }
 

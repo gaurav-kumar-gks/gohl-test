@@ -1,13 +1,13 @@
 package handler
 
-
 import (
 	"encoding/json"
-	"net/http"
 	"fmt"
+	"net/http"
 
+	"github.com/shopspring/decimal"
+	"gks.com/gohl-test/internal/models"
 	"gks.com/gohl-test/internal/repo"
-		"gks.com/gohl-test/internal/models"
 	"go.uber.org/zap"
 )
 
@@ -40,6 +40,12 @@ func (t *TransactionsHandler) CreateTransactions(w http.ResponseWriter, r *http.
 
 	if err := models.ValidateTransactions(&transaction); err != nil {
 		message := fmt.Sprintf("invalid transaction: %v", err)
+		errorResponse(w, http.StatusBadRequest, message)
+		return
+	}
+
+	if transaction.Amount.LessThanOrEqual(decimal.NewFromInt(0)) {
+		message := fmt.Sprintf("amount must be > 0")
 		errorResponse(w, http.StatusBadRequest, message)
 		return
 	}
