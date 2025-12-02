@@ -1,12 +1,13 @@
 package repo
 
-
 import (
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"go.uber.org/zap"
 
-	"gks.com/gohl-test/internal/models"
 	"context"
+
+	"gks.com/gohl-test/internal/models"
 )
 
 type UserRepository struct {
@@ -37,12 +38,12 @@ func(u *UserRepository) ListUsers(ctx context.Context) ([]models.User, error) {
 }
 
 func(u *UserRepository) CreateUser(ctx context.Context, model *models.CreateUser) (*models.User, error) {
-	query := `INSERT INTO users (name, email)
-			  VALUES ($1, $2)
+	query := `INSERT INTO users (id, name, email)
+			  VALUES ($1, $2, $3)
 			  RETURNING id, name, email, balance, created_at, updated_at`
 
 	var user models.User
-	err := u.DB.QueryRow(ctx, query, model.Name, model.Email).Scan(
+	err := u.DB.QueryRow(ctx, query, uuid.New().String(), model.Name, model.Email).Scan(
 		&user.Id,
 		&user.Name,
 		&user.Email,

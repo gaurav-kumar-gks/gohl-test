@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"gks.com/gohl-test/internal/models"
 	"gks.com/gohl-test/internal/repo"
@@ -44,7 +43,6 @@ func (u *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	model.Id = uuid.NewString()
 	userModel, err := u.repo.CreateUser(r.Context(), &user)
 	if err != nil {
 		message := fmt.Sprintf("failed to create user: %v", err)
